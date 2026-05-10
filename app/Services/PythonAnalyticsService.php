@@ -152,7 +152,7 @@ class PythonAnalyticsService
                     'id' => $order->id,
                     'user' => $user ? [
                         'gender' => $user->gender,
-                        'birthday' => $user->birthday ? $user->birthday->format('Y-m-d') : null,
+                        'birthday' => $user->birthday ? \Carbon\Carbon::parse($user->birthday)->format('Y-m-d') : null,
                     ] : null,
                     'details' => $order->details->map(function ($detail) {
                         return [

@@ -31,7 +31,7 @@ Route::get('/', function () {
             } 
             // Nếu không có giới tính, thử theo độ tuổi
             else if ($user->birthday) {
-                $age = $user->birthday->diffInYears(now());
+                $age = \Carbon\Carbon::parse($user->birthday)->diffInYears(now());
                 $ageGroup = 'Unknown';
                 if ($age < 18) $ageGroup = '<18';
                 elseif ($age <= 25) $ageGroup = '18-25';
