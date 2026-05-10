@@ -10,6 +10,25 @@ Route::get('/', function () {
     return view('welcome', compact('featuredProducts'));
 });
 
+// ĐƯỜNG DẪN TẠM THỜI ĐỂ CHẠY SEEDER TRÊN RENDER FREE
+Route::get('/run-seeder', function () {
+    try {
+        echo "Đang bắt đầu chạy Seeder...<br>";
+        
+        // Tạo Role và Admin
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'RoleSeeder', '--force' => true]);
+        echo "1. Đã tạo xong Role và tài khoản Admin.<br>";
+        
+        // Tạo Sản phẩm mẫu
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'FixAndMoreProductsSeeder', '--force' => true]);
+        echo "2. Đã nạp xong Sản phẩm mẫu.<br>";
+        
+        return "<br><b>THÀNH CÔNG!</b> Bạn có thể quay lại trang chủ và đăng nhập admin ngay bây giờ.";
+    } catch (\Exception $e) {
+        return "LỖI: " . $e->getMessage();
+    }
+});
+
 Route::get('/category', function (\Illuminate\Http\Request $request) {
     $categories = \App\Models\Category::withCount('products')->get();
 
