@@ -15,8 +15,6 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libpq-dev \
     python3 \
-    python3-pip \
-    python3-venv \
     && rm -rf /var/lib/apt/lists/*
 
 # Cài đặt Node.js và npm (để build giao diện TailwindCSS/Vite)
