@@ -24,8 +24,9 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd zip intl
 
-# Kích hoạt Apache mod_rewrite để chạy Laravel Routing
-RUN a2enmod rewrite
+# Kích hoạt Apache mod_rewrite và đảm bảo chỉ dùng mpm_prefork (tránh lỗi AH00534 trên một số nền tảng Cloud)
+RUN a2dismod mpm_event mpm_worker || true \
+    && a2enmod mpm_prefork rewrite
 
 # Cài đặt Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
