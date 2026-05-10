@@ -22,9 +22,9 @@ Route::get('/run-seeder', function () {
         // TỰ ĐỘNG TẠO CATEGORY NẾU CHƯA CÓ (để tránh lỗi Foreign Key)
         if (\App\Models\Category::count() == 0) {
             \App\Models\Category::insert([
-                ['id' => 1, 'name' => 'Hoa Hồng', 'slug' => 'hoa-hong', 'created_at' => now(), 'updated_at' => now()],
-                ['id' => 2, 'name' => 'Hoa Tulip', 'slug' => 'hoa-tulip', 'created_at' => now(), 'updated_at' => now()],
-                ['id' => 3, 'name' => 'Lan Hồ Điệp', 'slug' => 'lan-ho-diep', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 1, 'name' => 'Hoa Hồng', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 2, 'name' => 'Hoa Tulip', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 3, 'name' => 'Lan Hồ Điệp', 'created_at' => now(), 'updated_at' => now()],
             ]);
             echo "2. Đã tạo xong 3 danh mục mặc định (Hoa Hồng, Tulip, Lan Hồ Điệp).<br>";
         }
