@@ -15,9 +15,20 @@ Route::get('/run-seeder', function () {
     try {
         echo "Đang bắt đầu chạy Seeder...<br>";
         
-        // Tạo Role và Admin
+        // TẠO TÀI KHOẢN ADMIN NẾU CHƯA CÓ
+        if (\App\Models\User::count() == 0) {
+            \App\Models\User::create([
+                'name' => 'Admin',
+                'email' => 'dongvuong597@gmail.com',
+                'password' => \Illuminate\Support\Facades\Hash::make('12345678'),
+                'email_verified_at' => now(),
+            ]);
+            echo "1. Đã tạo xong tài khoản Admin (dongvuong597@gmail.com).<br>";
+        }
+
+        // Gán Role cho Admin
         \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'RoleSeeder', '--force' => true]);
-        echo "1. Đã tạo xong Role và tài khoản Admin.<br>";
+        echo "2. Đã phân quyền Super Admin.<br>";
 
         // TỰ ĐỘNG TẠO CATEGORY NẾU CHƯA CÓ (để tránh lỗi Foreign Key)
         if (\App\Models\Category::count() == 0) {
