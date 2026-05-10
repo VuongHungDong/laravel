@@ -48,6 +48,9 @@ RUN cp .env.example .env
 # Cài đặt các gói thư viện backend (PHP)
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
+# Tạo APP_KEY tự động nếu chưa có (cần thiết cho CSRF Token)
+RUN php artisan key:generate --force
+
 # Cài đặt và build giao diện frontend (JS/CSS)
 RUN npm install && npm run build
 
