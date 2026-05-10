@@ -18,10 +18,20 @@ Route::get('/run-seeder', function () {
         // Tạo Role và Admin
         \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'RoleSeeder', '--force' => true]);
         echo "1. Đã tạo xong Role và tài khoản Admin.<br>";
+
+        // TỰ ĐỘNG TẠO CATEGORY NẾU CHƯA CÓ (để tránh lỗi Foreign Key)
+        if (\App\Models\Category::count() == 0) {
+            \App\Models\Category::insert([
+                ['id' => 1, 'name' => 'Hoa Hồng', 'slug' => 'hoa-hong', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 2, 'name' => 'Hoa Tulip', 'slug' => 'hoa-tulip', 'created_at' => now(), 'updated_at' => now()],
+                ['id' => 3, 'name' => 'Lan Hồ Điệp', 'slug' => 'lan-ho-diep', 'created_at' => now(), 'updated_at' => now()],
+            ]);
+            echo "2. Đã tạo xong 3 danh mục mặc định (Hoa Hồng, Tulip, Lan Hồ Điệp).<br>";
+        }
         
         // Tạo Sản phẩm mẫu
         \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'FixAndMoreProductsSeeder', '--force' => true]);
-        echo "2. Đã nạp xong Sản phẩm mẫu.<br>";
+        echo "3. Đã nạp xong Sản phẩm mẫu.<br>";
         
         return "<br><b>THÀNH CÔNG!</b> Bạn có thể quay lại trang chủ và đăng nhập admin ngay bây giờ.";
     } catch (\Exception $e) {
