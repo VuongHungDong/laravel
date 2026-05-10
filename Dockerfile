@@ -53,8 +53,11 @@ RUN npm install && npm run build
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Mở cổng 80 cho web server
+# Mở cổng 80 (mặc định)
 EXPOSE 80
+
+# Cấu hình Apache để lắng nghe cổng từ biến môi trường PORT (Railway yêu cầu)
+RUN sed -i 's/80/${PORT:-80}/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
 
 # Đặt quyền thực thi cho file khởi động (entrypoint)
 RUN chmod +x /var/www/html/docker-entrypoint.sh
