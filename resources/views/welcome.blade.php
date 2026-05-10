@@ -159,7 +159,7 @@
                 @foreach($recommendedProducts as $prod)
                     <div class="group relative bg-surface-base/80 rounded-xl overflow-hidden border border-earth-500/20 hover:border-jade-500/50 transition-all duration-300">
                         <a href="{{ route('product.show', $prod->slug) }}" class="block aspect-[4/5] overflow-hidden">
-                            <img src="{{ $prod->getImageUrl() }}" alt="{{ $prod->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <img src="{{ $prod->displayImage(800) }}" alt="{{ $prod->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <!-- Overlay gradient -->
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </a>
