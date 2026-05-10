@@ -17,7 +17,7 @@ Route::get('/run-seeder', function () {
         
         // TẠO TÀI KHOẢN ADMIN NẾU CHƯA CÓ
         if (\App\Models\User::count() == 0) {
-            \App\Models\User::create([
+            $admin = \App\Models\User::create([
                 'name' => 'Admin',
                 'email' => 'dongvuong597@gmail.com',
                 'password' => '12345678',
@@ -38,7 +38,13 @@ Route::get('/run-seeder', function () {
 
         // Gán Role cho Admin
         \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'RoleSeeder', '--force' => true]);
-        echo "2. Đã phân quyền Super Admin.<br>";
+        
+        // Bắt buộc cấp quyền super_admin của Spatie để thấy được tất cả Menu (Sản phẩm, Đơn hàng)
+        if (isset($admin)) {
+            $role = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+            $admin->assignRole($role);
+            echo "2. Đã phân quyền Super Admin cho dongvuong597@gmail.com.<br>";
+        }
 
         // TỰ ĐỘNG TẠO CATEGORY NẾU CHƯA CÓ (để tránh lỗi Foreign Key)
         if (\App\Models\Category::count() == 0) {
