@@ -21,7 +21,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 
 # Cấu hình và cài đặt các extension PHP cần cho Laravel & Spatie Media Library
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
+    && docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd zip intl
 
 # Kích hoạt Apache mod_rewrite để chạy Laravel Routing
 RUN a2enmod rewrite
