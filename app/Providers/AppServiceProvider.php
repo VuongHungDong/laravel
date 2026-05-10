@@ -24,9 +24,9 @@ class AppServiceProvider extends ServiceProvider
         if (config('app.env') === 'production' || env('RENDER') === 'true' || str_contains(config('app.url'), 'https')) {
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
-        // Đảm bảo Super Admin luôn có quyền truy cập tất cả Menu trong Filament
+        // Đảm bảo Admin luôn có quyền truy cập tất cả Menu trong Filament
         \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
-            return $user->hasRole('super_admin') ? true : null;
+            return ($user->hasRole('super_admin') || $user->role === 'admin') ? true : null;
         });
     }
 }
