@@ -42,12 +42,16 @@ class AuthController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email', 'max:45'],
             'password' => ['required', 'min:6', 'confirmed', 'max:45'],
+            'gender' => ['nullable', 'in:male,female,other'],
+            'birthday' => ['nullable', 'date'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $request->password, // Mutator/cast in model will hash it
+            'gender' => $request->gender,
+            'birthday' => $request->birthday,
             'role' => 'user'
         ]);
 

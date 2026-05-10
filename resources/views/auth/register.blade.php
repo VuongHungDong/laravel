@@ -42,6 +42,22 @@
                     <label for="email" class="block text-sm font-medium text-surface-variant mb-1">Địa chỉ Email</label>
                     <input id="email" name="email" type="email" autocomplete="email" required class="appearance-none relative block w-full px-4 py-3 bg-surface-base/50 border border-earth-500/30 placeholder-surface-variant/50 text-white rounded-lg focus:outline-none focus:ring-1 focus:ring-jade-500 focus:border-jade-500 focus:z-10 sm:text-sm transition-colors" placeholder="Nhập email của bạn" value="{{ old('email') }}">
                 </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="gender" class="block text-sm font-medium text-surface-variant mb-1">Giới tính</label>
+                        <select id="gender" name="gender" class="appearance-none relative block w-full px-4 py-3 bg-surface-base/50 border border-earth-500/30 text-white rounded-lg focus:outline-none focus:ring-1 focus:ring-jade-500 focus:border-jade-500 focus:z-10 sm:text-sm transition-colors [&>option]:bg-surface-bright [&>option]:text-white">
+                            <option value="">Chọn giới tính</option>
+                            <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Nam</option>
+                            <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Nữ</option>
+                            <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Khác</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="birthday" class="block text-sm font-medium text-surface-variant mb-1">Ngày sinh</label>
+                        <input id="birthday" name="birthday" type="date" class="appearance-none relative block w-full px-4 py-3 bg-surface-base/50 border border-earth-500/30 placeholder-surface-variant/50 text-white rounded-lg focus:outline-none focus:ring-1 focus:ring-jade-500 focus:border-jade-500 focus:z-10 sm:text-sm transition-colors [color-scheme:dark]" value="{{ old('birthday') }}">
+                    </div>
+                </div>
                 <div>
                     <label for="password" class="block text-sm font-medium text-surface-variant mb-1">Mật khẩu</label>
                     <input id="password" name="password" type="password" autocomplete="new-password" required class="appearance-none relative block w-full px-4 py-3 bg-surface-base/50 border border-earth-500/30 placeholder-surface-variant/50 text-white rounded-lg focus:outline-none focus:ring-1 focus:ring-jade-500 focus:border-jade-500 focus:z-10 sm:text-sm transition-colors" placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)">

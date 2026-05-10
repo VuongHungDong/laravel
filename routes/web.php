@@ -7,7 +7,62 @@ use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     $featuredProducts = \App\Models\Product::inRandomOrder()->take(4)->get();
-    return view('welcome', compact('featuredProducts'));
+    
+    // Khởi tạo biến cho Popup AI Suggestion
+    $recommendedCategory = null;
+    $recommendedProducts = collect();
+    $aiMessage = "Dành riêng cho bạn";
+
+    if (auth()->check()) {
+        $user = auth()->user();
+        
+        // Cố gắng lấy data phân tích từ Python (đã cache)
+        $analytics = cache('python_analytics');
+        if (!$analytics) {
+            $service = new \App\Services\PythonAnalyticsService();
+            $analytics = $service->getAnalytics();
+        }
+
+        if ($analytics) {
+            // Logic tìm danh mục gợi ý theo giới tính
+            if ($user->gender && isset($analytics['gender_insights'][$user->gender])) {
+                $recommendedCategory = $analytics['gender_insights'][$user->gender]['top_category'];
+                $aiMessage = "Sản phẩm được " . ($user->gender == 'male' ? 'Nam giới' : 'Nữ giới') . " mua nhiều nhất";
+            } 
+            // Nếu không có giới tính, thử theo độ tuổi
+            else if ($user->birthday) {
+                $age = $user->birthday->diffInYears(now());
+                $ageGroup = 'Unknown';
+                if ($age < 18) $ageGroup = '<18';
+                elseif ($age <= 25) $ageGroup = '18-25';
+                elseif ($age <= 35) $ageGroup = '26-35';
+                elseif ($age <= 50) $ageGroup = '36-50';
+                else $ageGroup = '>50';
+
+                if (isset($analytics['age_insights'][$ageGroup])) {
+                    $recommendedCategory = $analytics['age_insights'][$ageGroup]['top_category'];
+                    $aiMessage = "Xu hướng của độ tuổi " . $ageGroup;
+                }
+            }
+        }
+
+        // Lấy sản phẩm của danh mục gợi ý
+        if ($recommendedCategory && $recommendedCategory != 'Unknown') {
+            $cat = \App\Models\Category::where('name', $recommendedCategory)->first();
+            if ($cat) {
+                $recommendedProducts = \App\Models\Product::where('category_id', $cat->id)
+                                        ->inRandomOrder()->take(4)->get();
+            }
+        }
+    }
+
+    // Nếu không có AI recommend (chưa đăng nhập hoặc data thiếu), lấy random
+    if ($recommendedProducts->isEmpty()) {
+        $recommendedProducts = \App\Models\Product::inRandomOrder()->take(4)->get();
+        $aiMessage = "Có thể bạn sẽ thích";
+    }
+
+    return view('welcome', compact('featuredProducts', 'recommendedProducts', 'aiMessage'));
 });
 
 // ĐƯỜNG DẪN TẠM THỜI ĐỂ CHẠY SEEDER TRÊN RENDER FREE

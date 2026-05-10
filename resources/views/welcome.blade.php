@@ -132,9 +132,91 @@
     </div>
 </section>
 
+<!-- AI Recommendation Popup -->
+@if(isset($recommendedProducts) && $recommendedProducts->isNotEmpty())
+    <div id="ai-popup" class="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none opacity-0 invisible" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"></div>
+
+        <!-- Popup Panel -->
+        <div class="relative glass rounded-2xl p-6 md:p-8 max-w-4xl w-[90%] md:w-full mx-4 shadow-2xl pointer-events-auto transform scale-95 opacity-0 transition-all overflow-hidden border border-jade-500/30">
+            <!-- Close Button -->
+            <button onclick="closeAiPopup()" class="absolute top-4 right-4 text-surface-variant hover:text-white transition-colors bg-black/20 rounded-full p-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <!-- Decorative header -->
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-jade-900/50 text-jade-400 mb-3 border border-jade-500/20">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h3 class="text-2xl font-serif font-bold text-white mb-1">Gợi Ý Thông Minh</h3>
+                <p class="text-jade-400 text-sm font-medium tracking-wider uppercase">{{ $aiMessage ?? 'Sản phẩm được gợi ý cho bạn' }}</p>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                @foreach($recommendedProducts as $prod)
+                    <div class="group relative bg-surface-base/80 rounded-xl overflow-hidden border border-earth-500/20 hover:border-jade-500/50 transition-all duration-300">
+                        <a href="{{ route('product.show', $prod->slug) }}" class="block aspect-[4/5] overflow-hidden">
+                            <img src="{{ $prod->getImageUrl() }}" alt="{{ $prod->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <!-- Overlay gradient -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </a>
+                        <div class="p-3">
+                            <h4 class="text-sm font-medium text-white truncate">{{ $prod->name }}</h4>
+                            <p class="text-earth-300 font-semibold mt-1 text-sm">{{ number_format($prod->price, 0, ',', '.') }}đ</p>
+                        </div>
+                        <div class="absolute inset-x-0 bottom-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            <button class="w-full bg-jade-600 hover:bg-jade-500 text-white text-xs font-medium py-2 rounded shadow-[0_0_10px_rgba(0,168,107,0.5)] transition-all flex items-center justify-center gap-1 btn-add-cart" data-product-id="{{ $prod->id }}" data-product-name="{{ $prod->name }}">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                Mua ngay
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+@endif
+
 @endsection
 
 @push('scripts')
+<script>
+    // Xử lý Popup AI
+    const aiPopup = document.getElementById('ai-popup');
+    if (aiPopup) {
+        const popupPanel = aiPopup.querySelector('.glass');
+        
+        // Hiện popup sau 3 giây
+        setTimeout(() => {
+            // Kiểm tra xem user đã đóng popup hôm nay chưa (tránh phiền)
+            if (!sessionStorage.getItem('ai_popup_closed')) {
+                aiPopup.classList.remove('invisible', 'opacity-0');
+                setTimeout(() => {
+                    popupPanel.classList.remove('scale-95', 'opacity-0');
+                    popupPanel.classList.add('scale-100', 'opacity-100');
+                }, 50);
+            }
+        }, 3000);
+    }
+
+    window.closeAiPopup = function() {
+        if (aiPopup) {
+            const popupPanel = aiPopup.querySelector('.glass');
+            popupPanel.classList.remove('scale-100', 'opacity-100');
+            popupPanel.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                aiPopup.classList.add('invisible', 'opacity-0');
+            }, 300);
+
+            // Lưu trạng thái đã đóng vào session storage
+            sessionStorage.setItem('ai_popup_closed', 'true');
+        }
+    }
+</script>
 <script>
     document.addEventListener("DOMContentLoaded", (event) => {
         // Initialize Swiper

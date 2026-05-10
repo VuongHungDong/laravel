@@ -40,6 +40,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
+                \App\Filament\Widgets\PythonAIAnalyticsWidget::class,
                 \App\Filament\Widgets\OrderStatsWidget::class,
                 \App\Filament\Widgets\OrderChartWidget::class,
                 \App\Filament\Widgets\TopProductsWidget::class,
