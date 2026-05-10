@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 
 class OrderChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Đơn hàng 7 ngày gần nhất';
+    protected ?string $heading = 'Đơn hàng 7 ngày gần nhất';
 
     protected static ?int $sort = 1;
 
