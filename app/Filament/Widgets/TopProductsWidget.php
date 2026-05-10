@@ -20,7 +20,7 @@ class TopProductsWidget extends BaseWidget
         return $table
             ->query(
                 Product::query()
-                    ->selectRaw('products.*, COALESCE((SELECT SUM(od.quantity) FROM order_details od JOIN orders o ON o.id = od.order_id WHERE od.product_id = products.id AND o.status != ?), 0) as total_sold', ['cancelled'])
+                    ->selectRaw("products.*, COALESCE((SELECT SUM(od.quantity) FROM order_details od JOIN orders o ON o.id = od.order_id WHERE od.product_id = products.id AND o.status != 'cancelled'), 0) as total_sold")
                     ->orderBy('total_sold', 'desc')
                     ->limit(5)
             )
