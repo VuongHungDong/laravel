@@ -21,7 +21,7 @@ class TopCustomersWidget extends BaseWidget
         return $table
             ->query(
                 Order::query()
-                    ->select('name', 'email', 'phone', DB::raw('COUNT(*) as total_orders'), DB::raw('SUM(total_price) as total_spent'))
+                    ->select('name', 'email', 'phone', DB::raw('MAX(id) as id'), DB::raw('COUNT(*) as total_orders'), DB::raw('SUM(total_price) as total_spent'))
                     ->where('status', '!=', 'cancelled')
                     ->whereNotNull('email')
                     ->groupBy('name', 'email', 'phone')
