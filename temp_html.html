@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jade Blossom Marketplace - Chậu Lan Hồ Điệp Hồng Đậm</title>
+    <meta name="csrf-token" content="3zjQvb8vPR82xwzjMJe0OqhC3YYP2uXIxvsHWx8Y">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- 1. TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        jade: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#59de9b',
+                            500: '#40C094',
+                            600: '#00A86B', // Primary 
+                            700: '#008F5B',
+                            800: '#006d43',
+                            900: '#003921',
+                        },
+                        earth: {
+                            100: '#feddb3',
+                            300: '#e1c299',
+                            500: '#D2B48C', // Secondary Light Brown
+                            700: '#5b4526',
+                            900: '#402d10',
+                        },
+                        surface: {
+                            base: '#131407',
+                            dim: '#0e0f03',
+                            bright: '#1f2111',
+                            text: '#e4e4cc',
+                            variant: '#bccabe',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif"', 'serif'],
+                        sans: ['"Be Vietnam Pro"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .glass {
+                @apply bg-surface-bright/30 backdrop-blur-md border border-earth-500/20;
+            }
+            .text-outline {
+                -webkit-text-stroke: 1px #D2B48C;
+                color: transparent;
+            }
+        }
+        body {
+            background-color: #131407;
+            color: #e4e4cc;
+            overflow-x: hidden;
+        }
+        ::selection {
+            background: #00A86B;
+            color: #fff;
+        }
+        /* Lenis smooth scrolling requires this */
+        html.lenis {
+            height: auto;
+        }
+        .lenis.lenis-smooth {
+            scroll-behavior: auto;
+        }
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+        .lenis.lenis-scrolling iframe {
+            pointer-events: none;
+        }
+    </style>
+
+    <!-- 2. Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <!-- 3. AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- 4. Toastify CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body class="font-sans antialiased bg-surface-base text-surface-text selection:bg-jade-600 selection:text-white flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300" id="navbar">
+        <div class="glass border-b-0">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-20">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="/" class="font-serif text-2xl font-bold text-jade-400">Jade<span class="text-earth-500">Blossom</span></a>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-8">
+                            <a href="/" class="hover:text-jade-400 px-3 py-2 rounded-md text-sm uppercase tracking-widest transition-colors duration-300">Trang chủ</a>
+                            <a href="/category" class="hover:text-jade-400 px-3 py-2 rounded-md text-sm uppercase tracking-widest transition-colors duration-300">Danh mục</a>
+                            <a href="/search" class="hover:text-jade-400 px-3 py-2 rounded-md text-sm uppercase tracking-widest transition-colors duration-300">Tìm kiếm</a>
+                            <a href="/cart" class="hover:text-jade-400 px-3 py-2 rounded-md text-sm uppercase tracking-widest transition-colors duration-300 flex items-center gap-2">
+                                Giỏ hàng 
+                                                                <span id="cart-count-badge" class="bg-jade-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex gap-4 items-center">
+                                                    <a href="http://127.0.0.1:8000/login" class="text-earth-500 border border-earth-500/30 hover:border-earth-500 hover:text-earth-300 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300">Đăng nhập</a>
+                            <a href="http://127.0.0.1:8000/register" class="bg-jade-600 hover:bg-jade-500 text-surface-base px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 shadow-[0_0_15px_rgba(0,168,107,0.3)]">Đăng ký</a>
+                                            </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-20">
+        
+<!-- Breadcrumb -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
+    <nav class="flex items-center gap-2 text-sm text-surface-variant" data-aos="fade-right">
+        <a href="/" class="hover:text-jade-400 transition-colors">Trang chủ</a>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        <a href="/category" class="hover:text-jade-400 transition-colors">Danh mục</a>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        <span class="text-earth-300">Lan Hồ Điệp</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        <span class="text-white font-medium truncate max-w-[200px]">Chậu Lan Hồ Điệp Hồng Đậm</span>
+    </nav>
+</div>
+
+<!-- Product Detail Section -->
+<section class="pb-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+
+            <!-- Product Image -->
+            <div class="relative" data-aos="fade-right">
+                <div class="aspect-[4/5] rounded-3xl overflow-hidden border border-earth-500/20 bg-surface-dim shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+                                            <img src="http://127.0.0.1:8000/storage/22/45.webp"
+                             alt="Chậu Lan Hồ Điệp Hồng Đậm"
+                             class="w-full h-full object-cover hover:scale-105 transition-transform duration-1000"
+                             id="product-main-image">
+                                    </div>
+
+                <!-- Floating badges -->
+                
+                <!-- Views badge -->
+                <div class="absolute bottom-6 right-6 glass px-4 py-2 rounded-full text-sm flex items-center gap-2">
+                    <svg class="w-4 h-4 text-jade-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    <span class="text-white font-medium">353</span>
+                    <span class="text-surface-variant">lượt xem</span>
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="flex flex-col justify-center" data-aos="fade-left">
+                <!-- Category -->
+                                <div class="mb-4">
+                    <span class="inline-block text-xs font-bold tracking-widest uppercase text-jade-400 bg-jade-600/10 border border-jade-600/30 px-4 py-1.5 rounded-full">
+                        Lan Hồ Điệp
+                    </span>
+                </div>
+                
+                <!-- Title -->
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-6 leading-tight">
+                    Chậu Lan Hồ Điệp Hồng Đậm
+                </h1>
+
+                <!-- Price -->
+                <div class="flex items-baseline gap-4 mb-8">
+                    <span class="text-4xl font-bold text-earth-300">2.900.000đ</span>
+                    <span class="text-sm text-surface-variant">Đã bao gồm VAT</span>
+                </div>
+
+                <!-- Divider -->
+                <div class="border-t border-earth-500/20 mb-8"></div>
+
+                <!-- Description -->
+                <div class="mb-8">
+                    <h3 class="text-sm font-semibold text-earth-300 uppercase tracking-wider mb-3">Mô tả sản phẩm</h3>
+                    <p class="text-surface-variant leading-relaxed text-base">
+                        Sắc hồng đậm rực rỡ, biểu trưng cho tình cảm nồng ấm và lời chúc sức khỏe.
+                    </p>
+                </div>
+
+                <!-- Product Details Grid -->
+                <div class="grid grid-cols-2 gap-4 mb-8">
+                    <div class="glass rounded-xl p-4 text-center">
+                        <div class="text-jade-400 mb-1">
+                            <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                        </div>
+                        <div class="text-white font-semibold">Còn hàng</div>
+                        <div class="text-xs text-surface-variant mt-1">9 sản phẩm</div>
+                    </div>
+                    <div class="glass rounded-xl p-4 text-center">
+                        <div class="text-jade-400 mb-1">
+                            <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div class="text-white font-semibold">Giao nhanh 2H</div>
+                        <div class="text-xs text-surface-variant mt-1">Nội thành HCM</div>
+                    </div>
+                    <div class="glass rounded-xl p-4 text-center">
+                        <div class="text-jade-400 mb-1">
+                            <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        </div>
+                        <div class="text-white font-semibold">Bảo hành</div>
+                        <div class="text-xs text-surface-variant mt-1">Tươi 3 ngày</div>
+                    </div>
+                    <div class="glass rounded-xl p-4 text-center">
+                        <div class="text-jade-400 mb-1">
+                            <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                        </div>
+                        <div class="text-white font-semibold">Thanh toán</div>
+                        <div class="text-xs text-surface-variant mt-1">COD / Online</div>
+                    </div>
+                </div>
+
+                <!-- Quantity & Add to Cart -->
+                                <div class="flex flex-col sm:flex-row items-stretch gap-4 mb-6">
+                    <!-- Quantity Selector -->
+                    <div class="flex items-center bg-surface-dim rounded-xl border border-earth-500/30 px-2">
+                        <button type="button" id="qty-minus" class="w-10 h-12 flex items-center justify-center text-surface-variant hover:text-white transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                        </button>
+                        <input type="number" id="product-qty" value="1" min="1" max="9" class="w-16 text-center bg-transparent text-white text-lg font-semibold focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                        <button type="button" id="qty-plus" class="w-10 h-12 flex items-center justify-center text-surface-variant hover:text-white transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        </button>
+                    </div>
+
+                    <!-- Add to Cart Button -->
+                    <button type="button" id="detail-add-cart" class="flex-grow bg-jade-600 hover:bg-jade-500 text-white py-4 px-8 rounded-xl font-semibold text-lg transition-all duration-300 shadow-[0_0_25px_rgba(0,168,107,0.4)] hover:shadow-[0_0_35px_rgba(0,168,107,0.6)] flex items-center justify-center gap-3"
+                            data-product-id="45" data-product-name="Chậu Lan Hồ Điệp Hồng Đậm">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        Thêm vào giỏ hàng
+                    </button>
+                </div>
+                
+                <!-- Buy Now -->
+                                <a href="http://127.0.0.1:8000/checkout" class="block w-full text-center border-2 border-earth-500/50 hover:border-earth-500 text-earth-300 hover:text-white py-3 px-8 rounded-xl font-medium transition-all duration-300">
+                    Mua ngay
+                </a>
+                            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Related Products -->
+<section class="py-20 bg-surface-dim border-t border-earth-500/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-12" data-aos="fade-up">
+            <h2 class="text-3xl font-serif font-bold text-white mb-2">Sản phẩm liên quan</h2>
+            <p class="text-surface-variant">Có thể bạn cũng thích những sản phẩm này</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" data-aos="fade-up" data-aos-delay="100">
+                        <div class="group relative bg-surface-bright rounded-2xl overflow-hidden hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)] transition-all duration-500 h-full flex flex-col border border-earth-500/10">
+                <a href="http://127.0.0.1:8000/product/chau-lan-ho-diep-xanh-ngoc" class="block h-56 w-full overflow-hidden flex-shrink-0">
+                                            <img src="http://127.0.0.1:8000/storage/20/conversions/42-medium.jpg" alt="Chậu Lan Hồ Điệp Xanh Ngọc" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                                    </a>
+                <div class="p-5 flex-grow flex flex-col justify-between">
+                    <div>
+                        <a href="http://127.0.0.1:8000/product/chau-lan-ho-diep-xanh-ngoc">
+                            <h3 class="font-serif text-lg font-bold text-white mb-1 group-hover:text-jade-400 transition-colors line-clamp-1">Chậu Lan Hồ Điệp Xanh Ngọc</h3>
+                        </a>
+                        <p class="text-xs text-surface-variant mb-3 line-clamp-2">Màu xanh ngọc bích hiếm có trên lan hồ điệp, tạo điểm nhấn phong cách cho không gian.</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold text-earth-300">4.100.000đ</span>
+                        <button type="button" class="btn-add-cart bg-jade-600 hover:bg-jade-500 text-white text-sm px-4 py-2 rounded-full font-medium transition-all duration-300 shadow-[0_0_10px_rgba(0,168,107,0.3)]" data-product-id="42" data-product-name="Chậu Lan Hồ Điệp Xanh Ngọc">
+                            <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Thêm
+                        </button>
+                    </div>
+                </div>
+            </div>
+                        <div class="group relative bg-surface-bright rounded-2xl overflow-hidden hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)] transition-all duration-500 h-full flex flex-col border border-earth-500/10">
+                <a href="http://127.0.0.1:8000/product/lan-ho-diep-mix-nghe-thuat" class="block h-56 w-full overflow-hidden flex-shrink-0">
+                                            <img src="http://127.0.0.1:8000/storage/9/conversions/25-medium.jpg" alt="Lan Hồ Điệp Mix Nghệ Thuật" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                                    </a>
+                <div class="p-5 flex-grow flex flex-col justify-between">
+                    <div>
+                        <a href="http://127.0.0.1:8000/product/lan-ho-diep-mix-nghe-thuat">
+                            <h3 class="font-serif text-lg font-bold text-white mb-1 group-hover:text-jade-400 transition-colors line-clamp-1">Lan Hồ Điệp Mix Nghệ Thuật</h3>
+                        </a>
+                        <p class="text-xs text-surface-variant mb-3 line-clamp-2">Tác phẩm nghệ thuật cắm ghép 9 cành lan hồ điệp đa sắc trên lũa gỗ tự nhiên.</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold text-earth-300">6.800.000đ</span>
+                        <button type="button" class="btn-add-cart bg-jade-600 hover:bg-jade-500 text-white text-sm px-4 py-2 rounded-full font-medium transition-all duration-300 shadow-[0_0_10px_rgba(0,168,107,0.3)]" data-product-id="25" data-product-name="Lan Hồ Điệp Mix Nghệ Thuật">
+                            <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Thêm
+                        </button>
+                    </div>
+                </div>
+            </div>
+                        <div class="group relative bg-surface-bright rounded-2xl overflow-hidden hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)] transition-all duration-500 h-full flex flex-col border border-earth-500/10">
+                <a href="http://127.0.0.1:8000/product/chau-lan-ho-diep-vang-hoang-kim" class="block h-56 w-full overflow-hidden flex-shrink-0">
+                                            <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&amp;fit=crop&amp;q=80&amp;w=600" alt="Chậu Lan Hồ Điệp Vàng Hoàng Kim" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                                    </a>
+                <div class="p-5 flex-grow flex flex-col justify-between">
+                    <div>
+                        <a href="http://127.0.0.1:8000/product/chau-lan-ho-diep-vang-hoang-kim">
+                            <h3 class="font-serif text-lg font-bold text-white mb-1 group-hover:text-jade-400 transition-colors line-clamp-1">Chậu Lan Hồ Điệp Vàng Hoàng Kim</h3>
+                        </a>
+                        <p class="text-xs text-surface-variant mb-3 line-clamp-2">Mang lại ý nghĩa phong thủy tốt lành, thu hút tài lộc và sự thịnh vượng.</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold text-earth-300">2.800.000đ</span>
+                        <button type="button" class="btn-add-cart bg-jade-600 hover:bg-jade-500 text-white text-sm px-4 py-2 rounded-full font-medium transition-all duration-300 shadow-[0_0_10px_rgba(0,168,107,0.3)]" data-product-id="22" data-product-name="Chậu Lan Hồ Điệp Vàng Hoàng Kim">
+                            <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Thêm
+                        </button>
+                    </div>
+                </div>
+            </div>
+                        <div class="group relative bg-surface-bright rounded-2xl overflow-hidden hover:shadow-[0_10px_40px_rgba(0,0,0,0.5)] transition-all duration-500 h-full flex flex-col border border-earth-500/10">
+                <a href="http://127.0.0.1:8000/product/bo-lan-ho-diep-khai-truong" class="block h-56 w-full overflow-hidden flex-shrink-0">
+                                            <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&amp;fit=crop&amp;q=80&amp;w=600" alt="Bộ Lan Hồ Điệp Khai Trương" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                                    </a>
+                <div class="p-5 flex-grow flex flex-col justify-between">
+                    <div>
+                        <a href="http://127.0.0.1:8000/product/bo-lan-ho-diep-khai-truong">
+                            <h3 class="font-serif text-lg font-bold text-white mb-1 group-hover:text-jade-400 transition-colors line-clamp-1">Bộ Lan Hồ Điệp Khai Trương</h3>
+                        </a>
+                        <p class="text-xs text-surface-variant mb-3 line-clamp-2">Bộ 3 chậu lan ghép tinh tế dành riêng cho sự kiện khai trương, hội nghị.</p>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold text-earth-300">8.500.000đ</span>
+                        <button type="button" class="btn-add-cart bg-jade-600 hover:bg-jade-500 text-white text-sm px-4 py-2 rounded-full font-medium transition-all duration-300 shadow-[0_0_10px_rgba(0,168,107,0.3)]" data-product-id="44" data-product-name="Bộ Lan Hồ Điệp Khai Trương">
+                            <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Thêm
+                        </button>
+                    </div>
+                </div>
+            </div>
+                    </div>
+    </div>
+</section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-surface-dim border-t border-earth-500/10 mt-auto">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <span class="font-serif text-2xl font-bold text-jade-400">Jade<span class="text-earth-500">Blossom</span></span>
+                    <p class="mt-4 text-surface-variant text-sm max-w-sm">Không gian nghệ thuật hoa tươi sang trọng, mang đến sự tinh tế và cảm xúc trong từng thiết kế.</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-earth-300 uppercase tracking-wider">Khám phá</h3>
+                    <ul class="mt-4 space-y-2">
+                        <li><a href="/" class="text-sm text-surface-variant hover:text-jade-400 transition-colors">Trang chủ</a></li>
+                        <li><a href="/category" class="text-sm text-surface-variant hover:text-jade-400 transition-colors">Sản phẩm mới</a></li>
+                        <li><a href="/search" class="text-sm text-surface-variant hover:text-jade-400 transition-colors">Tìm kiếm</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-earth-300 uppercase tracking-wider">Hỗ trợ</h3>
+                    <ul class="mt-4 space-y-2">
+                        <li><a href="#" class="text-sm text-surface-variant hover:text-jade-400 transition-colors">Về chúng tôi</a></li>
+                        <li><a href="#" class="text-sm text-surface-variant hover:text-jade-400 transition-colors">Chính sách bảo mật</a></li>
+                        <li><a href="#" class="text-sm text-surface-variant hover:text-jade-400 transition-colors">Liên hệ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-earth-500/10 pt-8 flex items-center justify-between">
+                <p class="text-sm text-surface-variant">&copy; 2026 Jade Blossom Marketplace. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Libraries JS -->
+    <!-- 5. GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- 6. Lenis (Smooth Scroll) -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+    
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- 7. SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Toastify JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    
+    <!-- 8. Tippy.js (Tooltips) & Popper.js -->
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    
+    <!-- 9. Lottie-web -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+    
+    <!-- 10. Rellax.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rellax/1.12.0/rellax.min.js"></script>
+
+    <!-- Global Scripts Initialization -->
+    <script>
+        // Initialize Lenis (Smooth Scroll) - wrapped in try/catch
+        try {
+            var lenis = new Lenis({
+                duration: 1.2,
+                easing: function(t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+                smooth: true,
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+        } catch(e) {
+            console.warn('Lenis init skipped:', e.message);
+        }
+
+        // Connect GSAP to Lenis - wrapped in try/catch
+        try {
+            gsap.registerPlugin(ScrollTrigger);
+            if (typeof lenis !== 'undefined') {
+                lenis.on('scroll', ScrollTrigger.update);
+                gsap.ticker.add(function(time) {
+                    lenis.raf(time * 1000);
+                });
+            }
+            gsap.ticker.lagSmoothing(0, 0);
+        } catch(e) {
+            console.warn('GSAP init skipped:', e.message);
+        }
+
+        // Initialize AOS
+        try {
+            AOS.init({
+                duration: 1000,
+                once: true,
+                offset: 100,
+            });
+        } catch(e) {
+            console.warn('AOS init skipped:', e.message);
+        }
+
+        // Initialize Rellax
+        try {
+            if (document.querySelector('.rellax')) {
+                var rellax = new Rellax('.rellax');
+            }
+        } catch(e) {
+            console.warn('Rellax init skipped:', e.message);
+        }
+
+        // Navbar blur effect on scroll
+        window.addEventListener('scroll', function() {
+            var nav = document.getElementById('navbar');
+            if (nav) {
+                if (window.scrollY > 50) {
+                    nav.classList.add('shadow-lg');
+                } else {
+                    nav.classList.remove('shadow-lg');
+                }
+            }
+        });
+    </script>
+
+    <!-- Cart & UI Functions (separate script block so it ALWAYS runs) -->
+    <script>
+        // Toast notification
+        window.showToast = function(msg, type) {
+            type = type || 'success';
+            try {
+                Toastify({
+                    text: msg,
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    style: {
+                        background: type === "success" ? "#00A86B" : "#D2B48C",
+                        color: "#131407",
+                        borderRadius: "8px",
+                        fontFamily: "Be Vietnam Pro"
+                    }
+                }).showToast();
+            } catch(e) {
+                alert(msg);
+            }
+        };
+
+        // SweetAlert
+        window.showAlert = function(title, text, icon) {
+            icon = icon || 'success';
+            try {
+                Swal.fire({
+                    title: title,
+                    text: text,
+                    icon: icon,
+                    background: '#1f2111',
+                    color: '#e4e4cc',
+                    confirmButtonColor: '#00A86B'
+                });
+            } catch(e) {
+                alert(title + ': ' + text);
+            }
+        };
+
+        // Add to Cart AJAX
+        window.addToCart = function(productId, productName) {
+            var csrfToken = document.querySelector('meta[name="csrf-token"]');
+            if (!csrfToken) {
+                window.showToast('Lỗi bảo mật. Vui lòng tải lại trang.', 'error');
+                return;
+            }
+            
+            fetch('/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken.getAttribute('content'),
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    product_id: productId,
+                    quantity: 1
+                })
+            })
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status);
+                }
+                return response.json();
+            })
+            .then(function(data) {
+                if (data.success) {
+                    window.showToast(data.message, 'success');
+                    var badge = document.getElementById('cart-count-badge');
+                    if (badge) {
+                        badge.innerText = data.cart_count;
+                    }
+                } else {
+                    window.showToast(data.message || 'Lỗi khi thêm vào giỏ hàng', 'error');
+                }
+            })
+            .catch(function(error) {
+                console.error('Cart Error:', error);
+                window.showToast('Lỗi kết nối: ' + error.message, 'error');
+            });
+        };
+
+        // Event delegation for .btn-add-cart buttons
+        // Uses CAPTURE phase to fire before Swiper blocks clicks
+        document.addEventListener('click', function(e) {
+            var btn = e.target.closest('.btn-add-cart');
+            if (!btn) return;
+            
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            
+            var productId = btn.getAttribute('data-product-id');
+            var productName = btn.getAttribute('data-product-name');
+            
+            if (!productId) return;
+            
+            // Disable button temporarily & show loading
+            btn.disabled = true;
+            var originalHTML = btn.innerHTML;
+            btn.innerHTML = '<svg class="w-4 h-4 inline-block animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Đang thêm...';
+            
+            window.addToCart(productId, productName);
+            
+            setTimeout(function() {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }, 1500);
+        }, true);
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Quantity controls
+        var qtyInput = document.getElementById('product-qty');
+        var qtyMinus = document.getElementById('qty-minus');
+        var qtyPlus = document.getElementById('qty-plus');
+        var maxQty = 9;
+
+        if (qtyMinus && qtyInput) {
+            qtyMinus.addEventListener('click', function() {
+                var val = parseInt(qtyInput.value) || 1;
+                if (val > 1) {
+                    qtyInput.value = val - 1;
+                }
+            });
+        }
+
+        if (qtyPlus && qtyInput) {
+            qtyPlus.addEventListener('click', function() {
+                var val = parseInt(qtyInput.value) || 1;
+                if (val < maxQty) {
+                    qtyInput.value = val + 1;
+                }
+            });
+        }
+
+        // Add to cart from detail page (supports custom quantity)
+        var detailBtn = document.getElementById('detail-add-cart');
+        if (detailBtn) {
+            detailBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+
+                var productId = this.getAttribute('data-product-id');
+                var productName = this.getAttribute('data-product-name');
+                var quantity = parseInt(qtyInput.value) || 1;
+
+                // Disable & loading state
+                this.disabled = true;
+                var originalHTML = this.innerHTML;
+                this.innerHTML = '<svg class="w-6 h-6 inline-block animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Đang thêm vào giỏ...';
+
+                var btn = this;
+                var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                fetch('/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        product_id: productId,
+                        quantity: quantity
+                    })
+                })
+                .then(function(response) {
+                    if (!response.ok) throw new Error('HTTP ' + response.status);
+                    return response.json();
+                })
+                .then(function(data) {
+                    if (data.success) {
+                        window.showToast(data.message, 'success');
+                        var badge = document.getElementById('cart-count-badge');
+                        if (badge) badge.innerText = data.cart_count;
+                    } else {
+                        window.showToast(data.message || 'Lỗi khi thêm vào giỏ hàng', 'error');
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Cart Error:', error);
+                    window.showToast('Lỗi kết nối: ' + error.message, 'error');
+                })
+                .finally(function() {
+                    setTimeout(function() {
+                        btn.disabled = false;
+                        btn.innerHTML = originalHTML;
+                    }, 1000);
+                });
+            });
+        }
+
+        // Initialize Tippy tooltips
+        try {
+            tippy('[data-tippy-content]', {
+                placement: 'top',
+                theme: 'light',
+                animation: 'scale',
+            });
+        } catch(e) {}
+    });
+</script>
+</body>
+</html>
