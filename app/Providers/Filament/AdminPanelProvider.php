@@ -42,6 +42,10 @@ class AdminPanelProvider extends PanelProvider
                 AccountWidget::class,
                 \App\Filament\Widgets\OrderStatsWidget::class,
                 \App\Filament\Widgets\OrderChartWidget::class,
+                \App\Filament\Widgets\TopProductsWidget::class,
+                \App\Filament\Widgets\TopCustomersWidget::class,
+                \App\Filament\Widgets\LeastPurchasedProductsWidget::class,
+                \App\Filament\Widgets\LeastViewedProductsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
