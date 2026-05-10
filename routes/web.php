@@ -20,20 +20,19 @@ Route::get('/run-seeder', function () {
             \App\Models\User::create([
                 'name' => 'Admin',
                 'email' => 'dongvuong597@gmail.com',
-                'password' => \Illuminate\Support\Facades\Hash::make('12345678'),
+                'password' => '12345678',
                 'email_verified_at' => now(),
                 'role' => 'admin',
             ]);
             echo "1. Đã tạo xong tài khoản Admin (dongvuong597@gmail.com).<br>";
         } else {
-            // Nếu User đã tồn tại, chắc chắn cột role = 'admin'
+            // Nếu User đã tồn tại, reset lại mật khẩu và quyền
             $admin = \App\Models\User::where('email', 'dongvuong597@gmail.com')->first();
-            if ($admin && $admin->role !== 'admin') {
+            if ($admin) {
+                $admin->password = '12345678';
                 $admin->role = 'admin';
                 $admin->save();
-                echo "1. Đã cập nhật quyền admin cho dongvuong597@gmail.com.<br>";
-            } else {
-                echo "1. Tài khoản Admin đã tồn tại.<br>";
+                echo "1. Đã reset mật khẩu và quyền admin cho dongvuong597@gmail.com.<br>";
             }
         }
 
