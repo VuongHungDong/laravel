@@ -22,8 +22,19 @@ Route::get('/run-seeder', function () {
                 'email' => 'dongvuong597@gmail.com',
                 'password' => \Illuminate\Support\Facades\Hash::make('12345678'),
                 'email_verified_at' => now(),
+                'role' => 'admin',
             ]);
             echo "1. Đã tạo xong tài khoản Admin (dongvuong597@gmail.com).<br>";
+        } else {
+            // Nếu User đã tồn tại, chắc chắn cột role = 'admin'
+            $admin = \App\Models\User::where('email', 'dongvuong597@gmail.com')->first();
+            if ($admin && $admin->role !== 'admin') {
+                $admin->role = 'admin';
+                $admin->save();
+                echo "1. Đã cập nhật quyền admin cho dongvuong597@gmail.com.<br>";
+            } else {
+                echo "1. Tài khoản Admin đã tồn tại.<br>";
+            }
         }
 
         // Gán Role cho Admin

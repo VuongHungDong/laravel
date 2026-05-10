@@ -51,6 +51,9 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 # Cài đặt và build giao diện frontend (JS/CSS)
 RUN npm install && npm run build
 
+# Xuất bản assets của Filament (CSS/JS cho trang Admin)
+RUN php artisan filament:assets
+
 # Phân quyền lại cho thư mục storage và bootstrap/cache để ứng dụng có thể ghi log/cache/hình ảnh
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
