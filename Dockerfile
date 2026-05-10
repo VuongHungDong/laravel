@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     libicu-dev \
     libonig-dev \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Cài đặt Node.js và npm (để build giao diện TailwindCSS/Vite)
