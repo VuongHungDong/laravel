@@ -8,7 +8,10 @@ use App\Services\PythonAnalyticsService;
 class PythonAIAnalyticsWidget extends Widget
 {
     protected string $view = 'filament.widgets.python-a-i-analytics-widget';
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = [
+        'md' => 1,
+        'xl' => 1,
+    ];
 
     protected static ?int $sort = 7;
 

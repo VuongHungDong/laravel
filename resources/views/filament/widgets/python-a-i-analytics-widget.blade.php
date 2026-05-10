@@ -6,7 +6,7 @@
         </div>
 
         @if($analyticsData)
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="flex flex-col gap-4">
                 <!-- Phân tích theo Giới tính -->
                 <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
                     <h3 class="font-semibold text-gray-700 dark:text-gray-300 mb-3 border-b border-gray-200 dark:border-gray-700 pb-2">Sở thích theo Giới tính</h3>
