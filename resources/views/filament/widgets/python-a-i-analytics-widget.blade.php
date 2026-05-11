@@ -1,67 +1,47 @@
 <x-filament-widgets::widget>
     <x-filament::section>
-        <div class="flex items-center gap-2 mb-4">
-            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-            <h2 class="text-lg font-bold text-gray-900 dark:text-white">Python AI: Phân tích hành vi mua sắm</h2>
-        </div>
+        <x-slot name="heading">
+            ⚡ Python AI: Phân tích hành vi mua sắm
+        </x-slot>
 
         @if($analyticsData)
-            <div class="flex flex-col gap-4">
-                <!-- Phân tích theo Giới tính -->
-                <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                    <h3 class="font-semibold text-gray-700 dark:text-gray-300 mb-3 border-b border-gray-200 dark:border-gray-700 pb-2">Sở thích theo Giới tính</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                {{-- Phân tích theo Giới tính --}}
+                <div style="padding: 12px; background: rgba(59,130,246,0.05); border-radius: 8px; border: 1px solid rgba(59,130,246,0.15);">
+                    <p style="font-weight: 600; font-size: 13px; margin-bottom: 8px; color: #93c5fd; border-bottom: 1px solid rgba(59,130,246,0.15); padding-bottom: 6px;">👥 Sở thích theo Giới tính</p>
                     @if(isset($analyticsData['gender_insights']) && count($analyticsData['gender_insights']) > 0)
-                        <ul class="space-y-3">
-                            @foreach($analyticsData['gender_insights'] as $gender => $insight)
-                                <li class="flex items-start gap-3">
-                                    <div class="p-2 rounded-md bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                                        @if($gender === 'male')
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                                        @elseif($gender === 'female')
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                                        @else
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                        @endif
-                                    </div>
-                                    <div>
-                                        <p class="font-medium text-gray-900 dark:text-white">{{ $gender == 'male' ? 'Nam' : ($gender == 'female' ? 'Nữ' : 'Chưa rõ') }}</p>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">Mua nhiều nhất: <strong class="text-green-600 dark:text-green-400">{{ $insight['top_category'] }}</strong></p>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
+                        @foreach($analyticsData['gender_insights'] as $gender => $insight)
+                            <div style="display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 13px;">
+                                <span style="font-weight: 500; min-width: 50px;">{{ $gender == 'male' ? '👨 Nam' : ($gender == 'female' ? '👩 Nữ' : '🧑 Khác') }}</span>
+                                <span style="color: #9ca3af;">→</span>
+                                <span style="color: #4ade80; font-weight: 600;">{{ $insight['top_category'] }}</span>
+                            </div>
+                        @endforeach
                     @else
-                        <p class="text-sm text-gray-500">Chưa đủ dữ liệu.</p>
+                        <p style="font-size: 12px; color: #6b7280;">Chưa đủ dữ liệu.</p>
                     @endif
                 </div>
 
-                <!-- Phân tích theo Độ tuổi -->
-                <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                    <h3 class="font-semibold text-gray-700 dark:text-gray-300 mb-3 border-b border-gray-200 dark:border-gray-700 pb-2">Sở thích theo Độ tuổi</h3>
+                {{-- Phân tích theo Độ tuổi --}}
+                <div style="padding: 12px; background: rgba(168,85,247,0.05); border-radius: 8px; border: 1px solid rgba(168,85,247,0.15);">
+                    <p style="font-weight: 600; font-size: 13px; margin-bottom: 8px; color: #c4b5fd; border-bottom: 1px solid rgba(168,85,247,0.15); padding-bottom: 6px;">📊 Sở thích theo Độ tuổi</p>
                     @if(isset($analyticsData['age_insights']) && count($analyticsData['age_insights']) > 0)
-                        <ul class="space-y-3">
-                            @foreach($analyticsData['age_insights'] as $age => $insight)
-                                <li class="flex items-start gap-3">
-                                    <div class="p-2 rounded-md bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium text-gray-900 dark:text-white">{{ $age == 'Unknown' ? 'Chưa rõ' : $age . ' tuổi' }}</p>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">Yêu thích: <strong class="text-green-600 dark:text-green-400">{{ $insight['top_category'] }}</strong></p>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
+                        @foreach($analyticsData['age_insights'] as $age => $insight)
+                            <div style="display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 13px;">
+                                <span style="font-weight: 500; min-width: 70px;">🎂 {{ $age == 'Unknown' ? 'Chưa rõ' : $age }}</span>
+                                <span style="color: #9ca3af;">→</span>
+                                <span style="color: #4ade80; font-weight: 600;">{{ $insight['top_category'] }}</span>
+                            </div>
+                        @endforeach
                     @else
-                        <p class="text-sm text-gray-500">Chưa đủ dữ liệu.</p>
+                        <p style="font-size: 12px; color: #6b7280;">Chưa đủ dữ liệu.</p>
                     @endif
                 </div>
             </div>
-            <p class="text-xs text-gray-400 mt-4 text-right">Tổng số đơn hàng đã phân tích: {{ $analyticsData['total_analyzed_orders'] ?? 0 }}</p>
+            <p style="font-size: 11px; color: #6b7280; text-align: right; margin-top: 8px;">Đã phân tích: {{ $analyticsData['total_analyzed_orders'] ?? 0 }} đơn hàng</p>
         @else
-            <div class="flex flex-col items-center justify-center py-6 text-gray-500">
-                <svg class="w-12 h-12 mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                <p>Python script chưa chạy được hoặc chưa có dữ liệu mua hàng.</p>
+            <div style="text-align: center; padding: 16px; color: #6b7280; font-size: 13px;">
+                ⚠️ Chưa có dữ liệu mua hàng để phân tích.
             </div>
         @endif
     </x-filament::section>
